@@ -9,20 +9,25 @@ import org.jsoup.*;
 public class NCES {
 
 	public static void main(String[] args) throws IOException {
-		// TODO Auto-generated method stub
 		Scanner input = new Scanner(System.in);
-		String query;
-		String URL = "http://nces.ed.gov/collegenavigator/?q=";
+		int collegeNum;
+		String query, URL = "http://nces.ed.gov/collegenavigator/?q=";
+		
 		System.out.println("What is the name of the college you want information about?");
 		query = toUrl(input.nextLine());
 		URL += query;
-		System.out.println(URL);
 		
 		Document site = Jsoup.connect(URL).get();
 		ArrayList<String[]> results = getResults(site);
+		
+		System.out.println("Which college is it?(number)");
 		for(int i = 0; i < results.size(); i++){
-			System.out.println(i + ":\n" + getCollegeName(results.get(i)) + "\n" + getCollegeLink(results.get(i)));
+			System.out.println(i + ": " + getCollegeName(results.get(i)));
 		}
+		collegeNum = input.nextInt();
+		
+		site = Jsoup.connect(getCollegeLink(results.get(collegeNum))).get();
+		System.out.println("Title: " + site.title());
 		input.close();
 	}
 	
@@ -41,7 +46,7 @@ public class NCES {
 	
 	public static ArrayList<String[]> getResults(Document site){
 		ArrayList<String[]> results = new ArrayList<String[]>();
-		Elements colleges = site.getElementsByClass("resultsTable").select("a[href");
+		Elements colleges = site.getElementsByClass("resultsTable").select("a[href]");
 		for(Element college: colleges){
 			if(college.hasText()){
 				String[] collegeData = {college.getElementsByTag("strong").text(), college.attr("href")};
