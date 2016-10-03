@@ -11,11 +11,10 @@ public class NCES {
 	public static void main(String[] args) throws IOException {
 		Scanner input = new Scanner(System.in);
 		int collegeNum;
-		String query, URL = "http://nces.ed.gov/collegenavigator/?q=";
+		String URL = "http://nces.ed.gov/collegenavigator/?q=";
 		
 		System.out.println("What is the name of the college you want information about?");
-		query = toUrl(input.nextLine());
-		URL += query;
+		URL += toUrl(input.nextLine());
 		
 		Document site = Jsoup.connect(URL).get();
 		ArrayList<String[]> results = getResults(site);
@@ -27,8 +26,20 @@ public class NCES {
 		collegeNum = input.nextInt();
 		
 		site = Jsoup.connect(getCollegeLink(results.get(collegeNum))).get();
-		System.out.println("Title: " + site.title());
+		String temp = getGeneral(site);
 		input.close();
+	}
+	
+	public static String getGeneral(Document site){
+		Elements general = site.getElementsByClass("layouttab").select("tbody").get(0).children();
+		Element info = site.getElementsByClass("collegedash").get(0).child(1).child(1);
+		System.out.println(info.text());
+		for(Element gen: general){
+			System.out.println(gen.child(0).text() + " " + gen.child(1).text());
+		}
+		
+		
+		return "";
 	}
 	
 	public static String toUrl(String query){
