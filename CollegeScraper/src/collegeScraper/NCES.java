@@ -26,11 +26,11 @@ public class NCES {
 		collegeNum = input.nextInt();
 		
 		site = Jsoup.connect(getCollegeLink(results.get(collegeNum))).get();
-		getCollegeScores(site);
+		getCollegeFin(site);
 		input.close();
 	}
 	
-	public static void getCollegeScores(Document site){
+	public static void getCollegeFin(Document site){
 		Elements finAid = site.getElementById("expenses").children();
 		String title1 = finAid.get(1).getElementsByClass("tabconstraint").get(0).child(0).text();
 		String title2 = finAid.get(1).getElementsByClass("tabconstraint").get(0).child(1).text();
