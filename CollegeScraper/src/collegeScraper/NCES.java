@@ -35,6 +35,8 @@ public class NCES {
 		String title1 = finAid.get(1).getElementsByClass("tabconstraint").get(0).child(0).text();
 		String title2 = finAid.get(1).getElementsByClass("tabconstraint").get(0).child(1).text();
 		
+		finAid = finAid.get(1).child(0).child(2).children();
+		
 		System.out.println(title1 + "\n" + title2);
 		for(Element fin:finAid){
 			System.out.println("Element: " + fin);
