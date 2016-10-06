@@ -26,7 +26,7 @@ public class NCES {
 		collegeNum = input.nextInt();
 		
 		site = Jsoup.connect(getCollegeLink(results.get(collegeNum))).get();
-		String temp = getGeneral(site);
+		//String temp = getGeneral(site);
 		input.close();
 	}
 	
@@ -35,7 +35,7 @@ public class NCES {
 		Element info = site.getElementsByClass("collegedash").get(0).child(1).child(1);
 		System.out.println(info.text());
 		for(Element gen: general){
-			System.out.println(gen.child(0).text() + " " + gen.child(1).text());
+			System.out.println(gen.child(0).text() + gen.child(1).text());
 		}
 		
 		
