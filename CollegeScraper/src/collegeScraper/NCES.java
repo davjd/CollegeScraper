@@ -26,34 +26,61 @@ public class NCES {
 		collegeNum = input.nextInt();
 		
 		site = Jsoup.connect(getCollegeLink(results.get(collegeNum))).get();
-		getCollegeFin(site);
+		getCollegeAid(site);
 		input.close();
 	}
 	
-	public static void getCollegeFin(Document site){
+	public static void getCollegeTuition(Document site){
 		Elements finAid = site.getElementById("expenses").children();
 		String title1 = finAid.get(1).getElementsByClass("tabconstraint").get(0).child(0).text();
 		String title2 = finAid.get(1).getElementsByClass("tabconstraint").get(0).child(1).text();
 		
 		finAid = finAid.get(1).child(0).child(2).children();
 		
-		System.out.println(title1 + "\n" + title2);
-		for(Element fin:finAid){
-			System.out.println("Element: " + fin);
+		System.out.println(title1 + "\n" + title2 + "\n");
+		
+		Elements finTop = finAid.get(1).child(0).children();
+		
+		for(Element top: finTop){
+			System.out.println(top.text());
 		}
-		//System.out.println(title);
+		System.out.println("\n");
+		
+		
+		finAid = finAid.select("tbody").get(0).children();
+		Elements iter_parent;
+		for(Element fin: finAid){
+			iter_parent = fin.children();
+			for(Element iter_child:iter_parent){
+				if(iter_child.hasText()){
+					System.out.println(iter_child.text());
+				}
+			}
+			System.out.println("\n");
+		}
 	}
 	
-	public static String getCollegeGeneral(Document site){
+	public static void getCollegeGeneral(Document site){
 		Elements general = site.getElementsByClass("layouttab").select("tbody").get(0).children();
 		Element info = site.getElementsByClass("collegedash").get(0).child(1).child(1);
 		System.out.println(info.text());
 		for(Element gen: general){
 			System.out.println(gen.child(0).text() + gen.child(1).text());
 		}
-		
-		
-		return "";
+	}
+	
+	public static void getCollegeAid(Document site){
+		Elements tableEles = site.getElementById("finaid").children();
+		System.out.println(tableEles.get(1).getElementsByClass("tablenames").text());
+		tableEles = tableEles.select("table").get(0).children();
+		Elements iter_children;
+		for(Element tableEle: tableEles.select("tbody").get(0).children()){
+			//System.out.println("Parent: " + tableEle);
+			iter_children = tableEle.children();
+			for(Element iter_child:iter_children){
+				System.out.println(iter_child.text());
+			}
+		}
 	}
 	
 	public static String toUrl(String query){
@@ -76,7 +103,7 @@ public class NCES {
 			if(college.hasText()){
 				String[] collegeData = {college.getElementsByTag("strong").text(), college.attr("href")};
 				results.add(collegeData);
-			}//
+			}
 		}
 		return results;
 	}
