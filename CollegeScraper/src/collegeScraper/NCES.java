@@ -76,7 +76,7 @@ public class NCES {
 			if(college.hasText()){
 				String[] collegeData = {college.getElementsByTag("strong").text(), college.attr("href")};
 				results.add(collegeData);
-			}
+			}//
 		}
 		return results;
 	}
